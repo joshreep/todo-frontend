@@ -29,11 +29,13 @@ const TaskListItem: FC<TaskListItemProps> = ({ task }) => {
   };
 
   const handleDelete = async () => {
-    await fetch('/api', {
-      method: 'DELETE',
-      body: JSON.stringify({ id: task.id }),
-    });
-    router.refresh();
+    if (window.confirm(`Are you sure you want to delete "${task.title}"`)) {
+      await fetch('/api', {
+        method: 'DELETE',
+        body: JSON.stringify({ id: task.id }),
+      });
+      router.refresh();
+    }
   };
 
   return (

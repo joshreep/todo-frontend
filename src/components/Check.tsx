@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import Image from 'next/image';
-import { FC } from 'react';
+import { FC, MouseEventHandler } from 'react';
 
 interface CheckProps {
   checked: boolean;
@@ -9,7 +9,11 @@ interface CheckProps {
 }
 
 const Check: FC<CheckProps> = ({ checked, className, onClick }) => {
-  const handleClick = () => onClick(!checked);
+  const handleClick: MouseEventHandler<HTMLButtonElement> = (event) => {
+    event.preventDefault();
+
+    onClick(!checked);
+  };
 
   return (
     <button

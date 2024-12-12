@@ -2,6 +2,14 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+1. Install all deps
+
+   ```bash
+   npm i
+   #or
+   yarn
+   ```
+
 1. Add an environment variable called `BACKEND_URL` to your `.env` file. If you are running the backend locally, it would look something like this:
 
    ```conf
@@ -14,10 +22,6 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
    npm run dev
    # or
    yarn dev
-   # or
-   pnpm dev
-   # or
-   bun dev
    ```
 
 Open [http://localhost:3001](http://localhost:3001) with your browser to see the result.

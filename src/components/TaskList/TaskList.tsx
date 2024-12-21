@@ -1,3 +1,5 @@
+'use client';
+
 import { Task } from '@/types';
 import { FC } from 'react';
 import TaskListEmpty from './TaskListEmpty';
@@ -8,7 +10,7 @@ interface TaskListProps {
   tasks: Task[];
 }
 
-const TaskList: FC<TaskListProps> = async ({ tasks }) => {
+const TaskList: FC<TaskListProps> = ({ tasks }) => {
   const completedCount = tasks.filter((task) => task.completed).length;
 
   const getCompletedPillText = () => {

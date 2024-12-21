@@ -1,4 +1,4 @@
-import { Task } from '@/types';
+import { makeRequest } from '@/utils';
 
 export async function POST(request: Request) {
   return makeRequest(request, (data) =>
@@ -32,19 +32,4 @@ export async function DELETE(request: Request) {
       method: 'DELETE',
     }),
   );
-}
-
-async function makeRequest(
-  request: Request,
-  fetcher: (data: Task) => Promise<Response>,
-) {
-  try {
-    const data = await request.json();
-
-    const res = await fetcher(data);
-
-    return Response.json(await res.json());
-  } catch (error) {
-    return new Response(JSON.stringify(error), { status: 500 });
-  }
 }

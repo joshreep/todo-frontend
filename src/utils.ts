@@ -12,16 +12,21 @@ export function hydrateTask(
 }
 
 export async function makeRequest(
-  request: Request,
-  fetcher: (data: Task) => Promise<Response>,
+  request: Request | null,
+  fetcher: (data?: Task) => Promise<Response>,
 ) {
   try {
-    const data = await request.json();
+    if (request) {
+      const data = await request.json();
+      const res = await fetcher(data);
 
-    const res = await fetcher(data);
-
-    return Response.json(await res.json());
+      return Response.json(await res.json());
+    } else {
+      const res = await fetcher();
+      return Response.json(await res.json());
+    }
   } catch (error) {
+    console.log(error);
     return new Response(JSON.stringify(error), { status: 500 });
   }
 }

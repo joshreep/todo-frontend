@@ -6,6 +6,12 @@ import TextInput from './Form/TextInput';
 import debounce from 'lodash.debounce';
 import { Task } from '@/types';
 
+type FuseResponse<T> = {
+  item: T;
+  refIndex: number;
+  score: number;
+}[];
+
 interface SearchBarProps {
   onUpdate: (tasks: Task[]) => void;
 }
@@ -13,19 +19,35 @@ interface SearchBarProps {
 const SearchBar: FC<SearchBarProps> = ({ onUpdate }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const submitSearch = useCallback(
-    () =>
-      debounce(async () => {
-        const data = await fetch(`/search/${searchTerm}`);
+  const fetchAllTasks = useCallback(async () => {
+    const res = await fetch(`/api`);
+    const tasksData = await res.json();
 
-        onUpdate(await data.json());
-      }, 500),
-    [searchTerm, onUpdate],
+    onUpdate(tasksData);
+  }, [onUpdate]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const submitSearch = useCallback(
+    debounce(async () => {
+      const data = await fetch(`/api/search/${searchTerm}`);
+
+      const fuseArray = (await data.json()) as FuseResponse<Task>;
+
+      const tasks = fuseArray
+        .sort((a, b) => a.score - b.score)
+        .map((item) => item.item);
+
+      onUpdate(tasks);
+    }, 500),
+    [onUpdate, searchTerm],
   );
 
   useEffect(() => {
-    submitSearch();
-  }, [submitSearch]);
+    if (searchTerm) submitSearch();
+    else fetchAllTasks();
+
+    return submitSearch.cancel;
+  }, [fetchAllTasks, searchTerm, submitSearch]);
 
   return (
     <FormGroup id="search" label="Search">

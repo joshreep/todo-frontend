@@ -1,5 +1,16 @@
 import { makeRequest } from '@/utils';
 
+export async function GET() {
+  return makeRequest(null, () =>
+    fetch(`${process.env.BACKEND_URL}/tasks`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }),
+  );
+}
+
 export async function POST(request: Request) {
   return makeRequest(request, (data) =>
     fetch(`${process.env.BACKEND_URL}/tasks`, {
@@ -15,7 +26,7 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
   return makeRequest(request, (data) =>
-    fetch(`${process.env.BACKEND_URL}/tasks/${data.id}`, {
+    fetch(`${process.env.BACKEND_URL}/tasks/${data?.id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
       headers: {
@@ -28,7 +39,7 @@ export async function PUT(request: Request) {
 
 export async function DELETE(request: Request) {
   return makeRequest(request, (data) =>
-    fetch(`${process.env.BACKEND_URL}/tasks/${data.id}`, {
+    fetch(`${process.env.BACKEND_URL}/tasks/${data?.id}`, {
       method: 'DELETE',
     }),
   );

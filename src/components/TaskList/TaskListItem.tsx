@@ -5,16 +5,14 @@ import { FC, MouseEventHandler } from 'react';
 import Check from '../Check';
 import Image from 'next/image';
 import classNames from 'classnames';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 interface TaskListItemProps {
+  onUpdate: () => void;
   task: Task;
 }
 
-const TaskListItem: FC<TaskListItemProps> = ({ task }) => {
-  const router = useRouter();
-
+const TaskListItem: FC<TaskListItemProps> = ({ onUpdate, task }) => {
   const handleChecked = async (completed: boolean) => {
     await fetch('/api', {
       method: 'PUT',
@@ -25,7 +23,7 @@ const TaskListItem: FC<TaskListItemProps> = ({ task }) => {
         completed,
       }),
     });
-    router.refresh();
+    onUpdate();
   };
 
   const handleDelete: MouseEventHandler<HTMLButtonElement> = async (event) => {
@@ -36,7 +34,7 @@ const TaskListItem: FC<TaskListItemProps> = ({ task }) => {
         method: 'DELETE',
         body: JSON.stringify({ id: task.id }),
       });
-      router.refresh();
+      onUpdate();
     }
   };
 
